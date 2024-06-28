@@ -14,35 +14,11 @@ function activate(context) {
 	let provider = vscode.languages.registerCompletionItemProvider(
 		['javascript', 'php'],
 		{
-			provideCompletionItems(document, position, token, context) {
+			provideCompletionItems() {
 				let completions = [];
-				let opt = {
-					divid: "divtable",
-					id: "tableid",
-					dataset: { data: "data", field: "field" },
-					sortby: false,
-					groupby: false,
-					sort: "sort",
-					by: "bt",
-					page: "page",
-					tbody: {
-						id: "tbodyid",
-						opsi: [
-							{ type: "edit", event: "handleEdit", cap: "Edit" },
-							{ type: "info", event: "handleDetail", cap: "Detail" },
-							{ type: "delete", event: "modalHapus2", cap: "Hapus" },
-						],
-						click: false,
-						dblclick: false
-					},
-					footer: {
-
-					},
-					pagination: { div: "divPagination" }
-				};
 
 				let completion = new vscode.CompletionItem('rendTables', vscode.CompletionItemKind.Function);
-				completion.insertText = new vscode.SnippetString(`rendTables(${JSON.stringify(opt, null, 4)})`);
+				completion.insertText = new vscode.SnippetString(`rendTables({\ndivid: "divtable",\nid: "tableid",\ndataset: { data: "data", field: "field" },\nsortby: false,\ngroupby: false,\nsort: "sort",\nby: "bt",\npage: "page",\ntbody: {\nid: "tbodyid",\nopsi: [\n{type: "edit", event: "handleEdit", cap: "Edit" },\n{type: "info", event: "handleDetail", cap: "Detail" },\n{type: "delete", event: "modalHapus2", cap: "Hapus" },],\nclick: false,\ndblclick: false\n},\nfooter: {\n\n},\n,pagination: { \ndiv: "divPagination"\n}\n})`);
 				completions.push(completion);
 
 				return completions;
@@ -55,20 +31,11 @@ function activate(context) {
 	let providerModal = vscode.languages.registerCompletionItemProvider(
 		['javascript', 'php'],
 		{
-			provideCompletionItems(document, position, token, context) {
+			provideCompletionItems() {
 				let completions = [];
 
-				let modalOpt = {
-					title: "Title",
-					form: true,
-					fn: "submitForm(event, {crud:'model/', fn:'main', modal:'ya'})",
-					btn: 'btnTutup',
-					footer: 'btnSave',
-					body: "body"
-				};
-
 				let completion = new vscode.CompletionItem('rendModal', vscode.CompletionItemKind.Function);
-				completion.insertText = new vscode.SnippetString(`rendModal(${JSON.stringify(modalOpt, null, 4).replace(/(?:\r\n|\r|\n)/g, '\n\t')}\n)`);
+				completion.insertText = new vscode.SnippetString(`rendModal({\ntitle: "Title",\nform: true,\nfn: "submitForm(event, {crud:'model/', fn:'main', modal:'ya'})",\nbtn: 'btnTutup',\nfooter: 'btnSave',\nbody: "body"});`);
 				completions.push(completion);
 
 				return completions;
@@ -78,29 +45,24 @@ function activate(context) {
 
 	context.subscriptions.push(providerModal);
 
-	const rendFormsCommand = vscode.commands.registerCommand('naylatools-framework.rendForms', async function () {
-		// Collect input from user
-		const input = await vscode.window.showInputBox({
+	let rendFormsCommand = vscode.commands.registerCommand('naylatools-framework.rendForms', async function () {
+		let input = await vscode.window.showInputBox({
 			prompt: 'Enter form elements separated by commas (e.g., select,text,textarea,checkbox)',
 			placeHolder: 'select,text,textarea,checkbox'
 		});
 
 		if (input) {
-			// Split input into array of elements
-			const elements = input.split(',').map(item => item.trim());
-
-			// Generate the array of form objects
-			const forms = elements.map(type => ({
+			let elements = input.split(',').map(item => item.trim());
+			let forms = elements.map(type => ({
 				type: type,
 				label: type,
-				name: type
+				name: type,
+				id: type
 			}));
 
-			// Generate the snippet string
-			const snippet = new vscode.SnippetString(`([${forms.map(form => JSON.stringify(form)).join(',\n\t')}])`);
+			let snippet = new vscode.SnippetString(`([${forms.map(form => JSON.stringify(form)).join(',\n\t')}])`);
 
-			// Insert the snippet into the active text editor
-			const editor = vscode.window.activeTextEditor;
+			let editor = vscode.window.activeTextEditor;
 			if (editor) {
 				editor.insertSnippet(snippet);
 			}
@@ -109,11 +71,11 @@ function activate(context) {
 
 	context.subscriptions.push(rendFormsCommand);
 
-	const providerForms = vscode.languages.registerCompletionItemProvider(
+	let providerForms = vscode.languages.registerCompletionItemProvider(
 		['javascript', 'php'],
 		{
-			provideCompletionItems(document, position, token, context) {
-				const completion = new vscode.CompletionItem('rendForms', vscode.CompletionItemKind.Function);
+			provideCompletionItems() {
+				let completion = new vscode.CompletionItem('rendForms', vscode.CompletionItemKind.Function);
 				completion.documentation = new vscode.MarkdownString('Masukan type formnya');
 				completion.command = {
 					command: 'naylatools-framework.rendForms',
@@ -130,7 +92,7 @@ function activate(context) {
 	let providerGI = vscode.languages.registerCompletionItemProvider(
 		['javascript', 'php'],
 		{
-			provideCompletionItems(document, position, token, context) {
+			provideCompletionItems() {
 				let completions = [];
 				let click = new vscode.CompletionItem('GIClick', vscode.CompletionItemKind.Function);
 				click.insertText = new vscode.SnippetString(`GI("inidi").addEventListener('click', (e)=>{\n\n})`);
@@ -206,6 +168,137 @@ function activate(context) {
 	);
 
 	context.subscriptions.push(providerGI);
+
+	let providerElm = vscode.languages.registerCompletionItemProvider(
+		['javascript', 'php'],
+		{
+			provideCompletionItems() {
+				let completions = [];
+				let div = new vscode.CompletionItem('elmDiv', vscode.CompletionItemKind.Function);
+				div.insertText = new vscode.SnippetString(`{elm:"div", cls:"cls", elms:[\n]},\n`);
+				completions.push(div);
+
+				let row6 = new vscode.CompletionItem('elmRow6', vscode.CompletionItemKind.Function);
+				row6.insertText = new vscode.SnippetString(`{elm:"div", cls:"row", elms:[\n{elm:"div", cls:"col-6", elms:[]},\n{elm:"div", cls:"col-6", elms:[]}\n],\n`);
+				completions.push(row6);
+
+				let row4 = new vscode.CompletionItem('elmRow4', vscode.CompletionItemKind.Function);
+				row4.insertText = new vscode.SnippetString(`{elm:"div", cls:"row", elms:[\n{elm:"div", cls:"col-4", elms:[]},\n{elm:"div", cls:"col-4", elms:[]},\n{elm:"div", cls:"col-4", elms:[]}\n],\n`);
+				completions.push(row4);
+
+				let row3 = new vscode.CompletionItem('elmRow3', vscode.CompletionItemKind.Function);
+				row3.insertText = new vscode.SnippetString(`{elm:"div", cls:"row", elms:[\n{elm:"div", cls:"col-3", elms:[]},\n{elm:"div", cls:"col-3", elms:[]},\n{elm:"div", cls:"col-3", elms:[]},\n{elm:"div", cls:"col-3", elms:[]}\n],\n`);
+				completions.push(row3);
+
+				let row2 = new vscode.CompletionItem('elmRow2', vscode.CompletionItemKind.Function);
+				row2.insertText = new vscode.SnippetString(`{elm:"div", cls:"row", elms:[\n{elm:"div", cls:"col-2", elms:[]},\n{elm:"div", cls:"col-2", elms:[]},\n{elm:"div", cls:"col-2", elms:[]},\n{elm:"div", cls:"col-2", elms:[]},\n{elm:"div", cls:"col-2", elms:[]}\n],\n`);
+				completions.push(row2);
+
+				let img = new vscode.CompletionItem('elmImg', vscode.CompletionItemKind.Function);
+				img.insertText = new vscode.SnippetString(`{elm:"img", src:"", id:"idImg", width:"100%"},\n`);
+				completions.push(img);
+
+				let btnDefault = new vscode.CompletionItem('elmBtnDefault', vscode.CompletionItemKind.Function);
+				btnDefault.insertText = new vscode.SnippetString(`{elm:"button", type:"button", id:"button", cls:"btn btn-default", text:"Button"},\n`);
+				completions.push(btnDefault);
+
+				let btnPrimary = new vscode.CompletionItem('elmBtnPrimary', vscode.CompletionItemKind.Function);
+				btnPrimary.insertText = new vscode.SnippetString(`{elm:"button", type:"button", id:"button", cls:"btn btn-primary", text:"Button"},\n`);
+				completions.push(btnPrimary);
+
+				let btnDanger = new vscode.CompletionItem('elmBtnDanger', vscode.CompletionItemKind.Function);
+				btnDanger.insertText = new vscode.SnippetString(`{elm:"button", type:"button", id:"button", cls:"btn btn-danger", text:"Button"},\n`);
+				completions.push(btnDanger);
+
+				let btnWarning = new vscode.CompletionItem('elmBtnWarning', vscode.CompletionItemKind.Function);
+				btnWarning.insertText = new vscode.SnippetString(`{elm:"button", type:"button", id:"button", cls:"btn btn-warning", text:"Button"},\n`);
+				completions.push(btnWarning);
+
+				let btnSecondary = new vscode.CompletionItem('elmBtnSecondary', vscode.CompletionItemKind.Function);
+				btnSecondary.insertText = new vscode.SnippetString(`{elm:"button", type:"button", id:"button", cls:"btn btn-secondary", text:"Button"},\n`);
+				completions.push(btnSecondary);
+
+				let btnOpsi = new vscode.CompletionItem('elmBtnOpsi', vscode.CompletionItemKind.Function);
+				btnOpsi.insertText = new vscode.SnippetString(`{elm:"button", type:"button", id:"button", cls:"btn btn-opsi", elms:[\n{elm:"span", cls:"material-icons", text:"edit"}\n]},\n`);
+				completions.push(btnOpsi);
+
+				let table = new vscode.CompletionItem('elmTable', vscode.CompletionItemKind.Function);
+				table.insertText = new vscode.SnippetString(`{elm:"div", cls:"table-responsive", elms:[
+					{elm:"table", elms:[
+						{elm:"thead", cls:"bg-thead", elms:[
+							{elm:"tr", elms:[
+								{elm:"th", text:"th1"},
+								{elm:"th", text:"th2"},
+								{elm:"th", text:"th3"},
+								{elm:"th", text:"th4"},
+							]}
+						]},
+						{elm:"tbody", id:"elmTbody", elms:[
+							{elm:"tr", elms:[
+								{elm:"td", text:"td1"},
+								{elm:"td", text:"td2"},
+								{elm:"td", text:"td3"},
+								{elm:"td", text:"td4"},
+							]}
+						]}		
+					]}
+				]},\n`);
+				completions.push(table);
+
+				let H1 = new vscode.CompletionItem('elmH1', vscode.CompletionItemKind.Function);
+				H1.insertText = new vscode.SnippetString(`{elm:"h1", text:"header1"},\n`);
+				completions.push(H1);
+
+				let H2 = new vscode.CompletionItem('elmH2', vscode.CompletionItemKind.Function);
+				H2.insertText = new vscode.SnippetString(`{elm:"h2", text:"header2"},\n`);
+				completions.push(H2);
+
+				let H3 = new vscode.CompletionItem('elmH3', vscode.CompletionItemKind.Function);
+				H3.insertText = new vscode.SnippetString(`{elm:"h3", text:"header3"},\n`);
+				completions.push(H3);
+
+				let H4 = new vscode.CompletionItem('elmH4', vscode.CompletionItemKind.Function);
+				H4.insertText = new vscode.SnippetString(`{elm:"h4", text:"header4"},\n`);
+				completions.push(H4);
+
+				let H5 = new vscode.CompletionItem('elmH5', vscode.CompletionItemKind.Function);
+				H5.insertText = new vscode.SnippetString(`{elm:"h5", text:"header5"},\n`);
+				completions.push(H5);
+
+				let H6 = new vscode.CompletionItem('elmH6', vscode.CompletionItemKind.Function);
+				H6.insertText = new vscode.SnippetString(`{elm:"h6", text:"header6"},\n`);
+				completions.push(H6);
+
+				let label = new vscode.CompletionItem('elmLabel', vscode.CompletionItemKind.Function);
+				label.insertText = new vscode.SnippetString(`{elm:"label", text:"label"},\n`);
+				completions.push(label);
+
+				let formGroup = new vscode.CompletionItem('elmFormGroup', vscode.CompletionItemKind.Function);
+				formGroup.insertText = new vscode.SnippetString(`{elm:"div", cls:"form-group", elms:[\n\n{elm:"div", cls:"invalid-feedback", text:"silahkan isi"}]},\n`);
+				completions.push(formGroup);
+
+				let inputText = new vscode.CompletionItem('elmInputText', vscode.CompletionItemKind.Function);
+				inputText.insertText = new vscode.SnippetString(`{elm:"input", type:"text", cls:"form-control", id:"edtText", name:"namaText", placeholder:"Silahkan ini text"},\n`);
+				completions.push(inputText);
+
+				let inputNumber = new vscode.CompletionItem('elmInputNumber', vscode.CompletionItemKind.Function);
+				inputNumber.insertText = new vscode.SnippetString(`{elm:"input", type:"number", cls:"form-control", id:"edtNumber", name:"namaNumber", value:"0"}`);
+				completions.push(inputNumber);
+
+				let inputTextarea = new vscode.CompletionItem('elmInputTextarea', vscode.CompletionItemKind.Function);
+				inputTextarea.insertText = new vscode.SnippetString(`{elm:"textarea", cls:"form-control", id:"edtTextarea", name:"namaTextarea", placeholder:"Silahkan ini textarea"}`);
+				completions.push(inputTextarea);
+
+				let inputCheckbox = new vscode.CompletionItem('elmInputCheckbox', vscode.CompletionItemKind.Function);
+				inputCheckbox.insertText = new vscode.SnippetString(`{"elm": "main", "elms": [\n{"elm": "div", "class": "form-check form-switch", "elms": [\n{"elm": "input", "class": "form-check-input", "type": "checkbox", "role": "switch", "id": "chk", "checked": true },\n{"elm": "label", "class": "form-check-label", "for": "chkAllDate", "text": "Aktif" }\n]}\n]},\n`);
+				completions.push(inputCheckbox);
+
+				return completions;
+			}
+		}
+	);
+
+	context.subscriptions.push(providerElm);
 }
 
 function deactivate() { }
