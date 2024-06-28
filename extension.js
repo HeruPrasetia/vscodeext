@@ -78,21 +78,49 @@ function activate(context) {
 
 	context.subscriptions.push(providerModal);
 
-	let providerForms = vscode.languages.registerCompletionItemProvider(
+	const rendFormsCommand = vscode.commands.registerCommand('naylatools-framework.rendForms', async function () {
+		// Collect input from user
+		const input = await vscode.window.showInputBox({
+			prompt: 'Enter form elements separated by commas (e.g., select,text,textarea,checkbox)',
+			placeHolder: 'select,text,textarea,checkbox'
+		});
+
+		if (input) {
+			// Split input into array of elements
+			const elements = input.split(',').map(item => item.trim());
+
+			// Generate the array of form objects
+			const forms = elements.map(type => ({
+				type: type,
+				label: type,
+				name: type
+			}));
+
+			// Generate the snippet string
+			const snippet = new vscode.SnippetString(`([${forms.map(form => JSON.stringify(form)).join(',\n\t')}])`);
+
+			// Insert the snippet into the active text editor
+			const editor = vscode.window.activeTextEditor;
+			if (editor) {
+				editor.insertSnippet(snippet);
+			}
+		}
+	});
+
+	context.subscriptions.push(rendFormsCommand);
+
+	const providerForms = vscode.languages.registerCompletionItemProvider(
 		['javascript', 'php'],
 		{
 			provideCompletionItems(document, position, token, context) {
-				let completions = [];
+				const completion = new vscode.CompletionItem('rendForms', vscode.CompletionItemKind.Function);
+				completion.documentation = new vscode.MarkdownString('Masukan type formnya');
+				completion.command = {
+					command: 'naylatools-framework.rendForms',
+					title: 'Masukan type form yang di inginkan'
+				};
 
-				let opt = [
-					{ type: "text", name: "nama", label: "Nama", req: "Silahkan Masukan Form" }
-				];
-
-				let completion = new vscode.CompletionItem('rendForms', vscode.CompletionItemKind.Function);
-				completion.insertText = new vscode.SnippetString(`rendForms(${JSON.stringify(opt, null, 4).replace(/(?:\r\n|\r|\n)/g, '\n\t')}\n)`);
-				completions.push(completion);
-
-				return completions;
+				return [completion];
 			}
 		}
 	);
