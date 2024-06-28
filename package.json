@@ -2,7 +2,7 @@
   "name": "naylatools-framework",
   "displayName": "NaylaTools Framework",
   "description": "extension untuk auto complate naylatools framework",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "NaylaTools",
   "engines": {
     "vscode": "^1.90.0"
