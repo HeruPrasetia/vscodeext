@@ -1,0 +1,62 @@
+{
+  "name": "naylatools-framework",
+  "displayName": "NaylaTools Framework",
+  "description": "extension untuk auto complate naylatools framework",
+  "version": "0.0.3",
+  "publisher": "NaylaTools",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:javascript",
+    "onLanguage:php"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "naylatools-framework.helloWorld",
+        "title": "Hello World"
+      }
+    ]
+  },
+  "languages": [
+    {
+      "id": "javascript",
+      "extensions": [
+        ".js"
+      ],
+      "aliases": [
+        "JavaScript",
+        "js"
+      ]
+    },
+    {
+      "id": "php",
+      "extensions": [
+        ".php"
+      ],
+      "aliases": [
+        "PHP",
+        "php"
+      ]
+    }
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.90.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "20.x",
+    "eslint": "^8.57.0",
+    "typescript": "^5.4.5",
+    "@vscode/test-cli": "^0.0.9",
+    "@vscode/test-electron": "^2.4.0"
+  }
+}
