@@ -345,6 +345,210 @@ function activate(context) {
 	);
 
 	context.subscriptions.push(providerElm);
+
+	let providerReact = vscode.languages.registerCompletionItemProvider(
+		['javascript', 'php', 'html'],
+		{
+			provideCompletionItems() {
+				let completions = [];
+
+				let div = new vscode.CompletionItem('reactDiv', vscode.CompletionItemKind.Function);
+				div.insertText = new vscode.SnippetString(`<div className="\${1:cls}">\n</div>`);
+				completions.push(div);
+
+				let img = new vscode.CompletionItem('reactImg', vscode.CompletionItemKind.Function);
+				img.insertText = new vscode.SnippetString(`<img src={\${1:src}} width="100%" />`);
+				completions.push(img);
+
+				let btnDefault = new vscode.CompletionItem('reactBtnDefault', vscode.CompletionItemKind.Function);
+				btnDefault.insertText = new vscode.SnippetString(`<button type="button" className="btn btn-default" id="\${1:btn}">\${2:button}</button>`);
+				completions.push(btnDefault);
+
+				let btnPrimary = new vscode.CompletionItem('reactBtnPrimary', vscode.CompletionItemKind.Function);
+				btnPrimary.insertText = new vscode.SnippetString(`<button type="button" className="btn btn-primary" id="\${1:btn}">\${2:button}</button>`);
+				completions.push(btnPrimary);
+
+				let btnDanger = new vscode.CompletionItem('reactBtnDanger', vscode.CompletionItemKind.Function);
+				btnDanger.insertText = new vscode.SnippetString(`<button type="button" className="btn btn-danger" id="\${1:btn}">\${2:button}</button>`);
+				completions.push(btnDanger);
+
+				let btnWarning = new vscode.CompletionItem('reactBtnWarning', vscode.CompletionItemKind.Function);
+				btnWarning.insertText = new vscode.SnippetString(`<button type="button" className="btn btn-warning" id="\${1:btn}">\${2:button}</button>`);
+				completions.push(btnWarning);
+
+				let btnSecondary = new vscode.CompletionItem('reactBtnSecondary', vscode.CompletionItemKind.Function);
+				btnSecondary.insertText = new vscode.SnippetString(`<button type="button" className="btn btn-secondary" id="\${1:btn}">\${2:button}</button>`);
+				completions.push(btnSecondary);
+
+				let btnOpsi = new vscode.CompletionItem('reactBtnOpsi', vscode.CompletionItemKind.Function);
+				btnOpsi.insertText = new vscode.SnippetString(`<button type="button" className="btn" id="\${1:btn}"><i className='\${2:fas fa-edit}'></i></button>`);
+				completions.push(btnOpsi);
+
+				let Table = new vscode.CompletionItem('ReactTable', vscode.CompletionItemKind.Function);
+				Table.insertText = new vscode.SnippetString(`<div className="table-responsive">
+						<table className="table table-stripped">
+							<thead>
+								<tr>
+									<th>th1</th>
+									<th>th2</th>
+									<th>th3</th>
+								</tr>
+							</thead>
+							<tbody>
+								{
+									this.state.\${1:data}.map((tr, i)=>{
+										return(<tr key={i}>
+											<td>{tr.\${2:data}}</td>
+											<td>{tr.\${3:data}}</td>
+											<td>{tr.\${4:data}}</td>
+										</tr>)
+									})
+								}
+							</tbody>
+						</table>
+					</div>`);
+				completions.push(Table);
+
+				let input = new vscode.CompletionItem('reactInput', vscode.CompletionItemKind.Function);
+				input.insertText = new vscode.SnippetString(`<input type="\${1:text}" className="form-control" id="\${edtText}" name="\${nama}" value={this.state.\${value}} onChange={(e)=>this.setState({\${value}:e.target.value})} />`);
+				completions.push(input);
+
+				let inputTextarea = new vscode.CompletionItem('reactInputTextarea', vscode.CompletionItemKind.Function);
+				inputTextarea.insertText = new vscode.SnippetString(`<textarea className="form-control" id="\${edtText}" name="\${nama}" value={this.state.\${value}} onChange={(e)=>this.setState({\${value}:e.target.value})} />`);
+				completions.push(inputTextarea);
+
+				let inputSelect = new vscode.CompletionItem('elmInputSelect', vscode.CompletionItemKind.Function);
+				inputSelect.insertText = new vscode.SnippetString(`<select className="form-select" name="\${1:nama}" id="\${2:id}" value={this.state.\${value}}>\n\n</select>`);
+				completions.push(inputSelect);
+
+				let bsCheckbox = new vscode.CompletionItem('reactCheckbox', vscode.CompletionItemKind.Function);
+				bsCheckbox.insertText = new vscode.SnippetString(`
+					<div className="form-check form-switch">
+						<input className="form-check-input" name='\${1:IsWajib}' type="checkbox" role="switch" id="\${2:flexSwitchCheckDefault}" checked={this.state.\${3:data} == 1 ? true : false} onChange={(e) => this.setState({\${4:data:e.target.cehecked}}) />
+						<label className="form-check-label" for="\${2:flexSwitchCheckDefault}">\${status}</label>
+					</div>`);
+				bsCheckbox.detail = "Ini adalah default chekbox dari bootstrap";
+				completions.push(bsCheckbox);
+
+				let bsFormGroup = new vscode.CompletionItem('reactFormGroup', vscode.CompletionItemKind.Function);
+				bsFormGroup.insertText = new vscode.SnippetString(`
+					<div className="form-group">
+						<label>\${1:label}</label>
+						<input type="\${2:text}" className="form-control" name='\${3:IsWajib}' id="\${4:edt}" value={this.state.\${5:data}} onChange={(e) => this.setState({\${4:data:e.target.value}}) />
+						<div className="invalid-feedback">\${5:Silahkan isi}</div>
+					</div>`);
+				bsFormGroup.detail = "Ini adalah default form lengkap dengan label";
+				completions.push(bsFormGroup);
+
+				let bsFormTextarea = new vscode.CompletionItem('reactFormTextArea', vscode.CompletionItemKind.Function);
+				bsFormTextarea.insertText = new vscode.SnippetString(`
+					<div className="form-group">
+						<label>\${1:label}</label>
+						<texraea type="\${2:text}" className="form-control" name='\${3:IsWajib}' id="\${4:edt}" value={this.state.\${5:data}} onChange={(e) => this.setState({\${4:data:e.target.value}}) />
+						<div className="invalid-feedback">\${5:Silahkan isi}</div>
+					</div>`);
+				bsFormTextarea.detail = "Ini adalah default form lengkap dengan label";
+				completions.push(bsFormTextarea);
+
+				let row6 = new vscode.CompletionItem('reactRow6', vscode.CompletionItemKind.Function);
+				row6.insertText = new vscode.SnippetString(`
+					<div className="row">
+						<div className="col-6">
+							
+						</div>
+						<div className="col-6">
+							
+						</div>
+					</div>`);
+				completions.push(row6);
+
+				let row4 = new vscode.CompletionItem('reactRow4', vscode.CompletionItemKind.Function);
+				row4.insertText = new vscode.SnippetString(`
+				<div className="row">
+					<div className="col-4">
+						
+					</div>
+					<div className="col-4">
+						
+					</div>
+					<div className="col-4">
+						
+					</div>
+				</div>	
+				`);
+				completions.push(row4);
+
+				let row3 = new vscode.CompletionItem('reactRow3', vscode.CompletionItemKind.Function);
+				row3.insertText = new vscode.SnippetString(`
+				<div className="row">
+					<div className="col-3">
+
+					</div>
+					<div className="col-3">
+
+					</div>
+					<div className="col-3">
+
+					</div>
+					<div className="col-3">
+
+					</div>
+				</div>	
+				`);
+				completions.push(row3);
+
+				let row2 = new vscode.CompletionItem('reactRow2', vscode.CompletionItemKind.Function);
+				row2.insertText = new vscode.SnippetString(`
+				<div className="row">
+					<div className="col-2">
+
+					</div>
+					<div className="col-2">
+
+					</div>
+					<div className="col-2">
+
+					</div>
+					<div className="col-2">
+
+					</div>
+					<div className="col-2">
+
+					</div>
+				</div>
+				`);
+				completions.push(row2);
+
+				let loopTR = new vscode.CompletionItem('loopTR', vscode.CompletionItemKind.Function);
+				loopTR.insertText = new vscode.SnippetString(`
+				{
+					this.state.\${1:data}.map((tr, i)=>{
+						return(<tr key={i}>
+							<td>{tr.\${2:data}}</td>
+							<td>{tr.\${3:data}}</td>
+							<td>{tr.\${4:data}}</td>
+						</tr>)
+					})
+				}`);
+				loopTR.detail = "Ini adalah loop tr dari data";
+				completions.push(loopTR);
+
+				let loopOpt = new vscode.CompletionItem('loopOpt', vscode.CompletionItemKind.Function);
+				loopOpt.insertText = new vscode.SnippetString(`
+				{
+					this.state.\${1:data}.map((opt, i)=>{
+						return(<option value={opt.\${2:ID}} key={i}>{opt.\${3:data}}</option>)
+					})
+				}`);
+				loopOpt.detail = "Ini adalah loop tr dari data";
+				completions.push(loopOpt);
+
+				return completions;
+			}
+		}
+	);
+
+	context.subscriptions.push(providerReact);
 }
 
 function deactivate() { }
