@@ -2,7 +2,7 @@
   "name": "naylatools-framework",
   "displayName": "NaylaTools Framework",
   "description": "extension untuk auto complate naylatools framework",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "publisher": "NaylaTools",
   "engines": {
     "vscode": "^1.90.0"
@@ -42,6 +42,16 @@
       "aliases": [
         "PHP",
         "php"
+      ]
+    },
+    {
+      "id": "html",
+      "extensions": [
+        ".html"
+      ],
+      "aliases": [
+        "HTML",
+        "html"
       ]
     }
   ],
